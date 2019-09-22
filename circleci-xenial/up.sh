@@ -9,6 +9,6 @@ docker-compose -f "$SCRIPT_HOME/docker-compose.yml" up -d --force-recreate  # re
 
 # aftermath note
 echo "
-# after container run, we can use 'psql' via
+# after container up, connect to bash prompt
 docker exec -it $CONTAINER_NAME bash
 "
