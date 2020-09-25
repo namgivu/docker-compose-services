@@ -1,16 +1,17 @@
-#TODO add ref. here
-version: '2.0'
+# ref. github.com/namgivu/docker-compose-services
+version: '3.6'
 
 services:
-  postgres:
-    image: mdillon/postgis  # postgres image with postgis ready
+  database:
+    image: mdillon/postgis  # postgres image with postgis ready ref. https://hub.docker.com/r/mdillon/postgis/  https://registry.hub.docker.com/_/postgres/
     ports:
-      - "54322:5432"  # note we double the last digit 2 on purpose to create our port - we aim not to overwrite the original port
-    container_name: nn_postgres  # nn aka namgivu shorthand
+      - "${PORT}:5432"
+    container_name: ${CONTAINER_NAME}
     volumes:
-      - v_postgres:/var/lib/postgresql/data
-    restart: always
+      - v:/var/lib/postgresql/data
+    restart: unless-stopped
 
 volumes:
-  v_postgres:
+  v:
+    name: "v_${CONTAINER_NAME}"
     driver: local

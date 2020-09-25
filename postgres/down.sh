@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
-s=$BASH_SOURCE ; s=$(dirname "$s") ; s=$(cd "$s" && pwd) ; SCRIPT_HOME="$s" # get SCRIPT_HOME=executed script's path, containing folder, cd & pwd to get container path
+SH=$(cd `dirname $BASH_SOURCE` && pwd)
+source "$SH/.config.sh"
+    if [ -z $CONTAINER_NAME ]; then echo 'Variable CONTAINER_NAME is required'; exit 1; fi
+        # delete container
+        docker stop -t1 $CONTAINER_NAME
+        docker rm   -f  $CONTAINER_NAME
 
-#docker-compose -f "$SCRIPT_HOME/docker-compose.yml" down #TODO we have error when stopping by docker-compose down > Removing network postgres_default; where is this network from?
-CONTAINER_NAME='nn_postgres'; docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+        # delete volume
+        docker volume rm "v_$CONTAINER_NAME"

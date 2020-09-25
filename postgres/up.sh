@@ -1,20 +1,18 @@
 #!/usr/bin/env bash
+docstring='
+$ (cd /path/to/this/folder; ./down.sh; ./up.sh )
+'
 
-s=$BASH_SOURCE ; s=$(dirname "$s") ; s=$(cd "$s" && pwd) ; SCRIPT_HOME="$s"  # get SCRIPT_HOME=executed script's path, containing folder, cd & pwd to get container path
 
-CONTAINER_NAME='nn_postgres'
-POSTGRES_USER='postgres'
+SH=$(cd `dirname $BASH_SOURCE` && pwd)
+source "$SH/.config.sh"
+    if [ -z $CONTAINER_NAME ]; then echo 'Variable CONTAINER_NAME is required'; exit 1; fi
+    if [ -z $PORT ];  then echo 'Variable PORT is required'; exit 1; fi
 
-# run the container
-docker-compose -f "$SCRIPT_HOME/docker-compose.yml" up -d --force-recreate  # ref. https://forums.docker.com/t/named-volume-with-postgresql-doesnt-keep-databases-data/7434/2
+    set -e  # halt if error ON
+        # run the container
+        #TODO make variables in .config.sh effective in docker-compose
+        docker-compose -f "$SH/docker-compose.yml"  --env-file "$SH/.config.sh"  up  -d  --force-recreate  # ref. https://forums.docker.com/t/named-volume-with-postgresql-doesnt-keep-databases-data/7434/2
+        #              .                            .                                .    .   .
 
-# aftermath note
-echo "
-# after container run, we can use 'psql' via
-docker exec -it $CONTAINER_NAME psql -U $POSTGRES_USER
-
-# or first step 1/2, open bash prompt first
-docker exec -it $CONTAINER_NAME bash #ref. https://askubuntu.com/a/507009/22308
-# then step 2/2, run psql
-psql -U $POSTGRES_USER
-"
+eval "$SH/summary.sh"
