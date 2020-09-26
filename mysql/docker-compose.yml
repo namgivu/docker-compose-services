@@ -1,11 +1,11 @@
-version: '3.6'
+version: '3.8'
 
 services:
   mysql:
     image: mysql:latest
     ports:
-      - 3306:3306  #TODO load from .config.sh
-    container_name: fairfield_mysql  #TODO load from .config.sh
+      - 20927:3306  #TODO load from .config.sh
+    container_name: nn_mysql  #TODO load from .config.sh
     volumes:
       - v:/var/lib/mysql
     environment:
@@ -16,10 +16,10 @@ services:
 
 volumes:
   v:
-    name: fairfield_mysql_v  #TODO use envvar CONTAINER_NAME
+    name: nn_mysql_v  #TODO use envvar CONTAINER_NAME
     driver: local
 
 networks:
   n:
     driver: bridge
-    name: fairfield_mysql_n  #TODO use envvar CONTAINER_NAME
+    name: nn_mysql_n  #TODO use envvar CONTAINER_NAME
