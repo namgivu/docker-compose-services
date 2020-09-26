@@ -1,0 +1,25 @@
+version: '3.6'
+
+services:
+  mysql:
+    image: mysql:latest
+    ports:
+      - 3306:3306  #TODO load from .config.sh
+    container_name: fairfield_mysql  #TODO load from .config.sh
+    volumes:
+      - v:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: some-root-password
+    restart: unless-stopped
+    networks:  # need bridged network so that to connect via container name
+      - n
+
+volumes:
+  v:
+    name: fairfield_mysql_v  #TODO use envvar CONTAINER_NAME
+    driver: local
+
+networks:
+  n:
+    driver: bridge
+    name: fairfield_mysql_n  #TODO use envvar CONTAINER_NAME
